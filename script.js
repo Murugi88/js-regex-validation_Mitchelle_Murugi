@@ -1,17 +1,17 @@
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("Sign-inform");
 
-    // Validation Functions
+    // Validation functions
     function validateFullName(name) {
         return /^[A-Za-z\s]+$/.test(name);
     }
 
-    function validateEmailAddress(emailaddress) {
-        return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailaddress);
+    function validateEmailAddress(email) {
+        return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
     }
 
-    function validatePhoneNumber(phonenumber) {
-        return /^[0-9]{10,15}$/.test(phonenumber);
+    function validatePhoneNumber(phone) {
+        return /^[0-9]{10,15}$/.test(phone);
     }
 
     function validatePasscode(passcode) {
@@ -21,13 +21,13 @@ document.addEventListener("DOMContentLoaded", function () {
     function showError(input, message) {
         const errorElement = input.nextElementSibling;
         errorElement.innerText = message;
-        input.style.border = "3px solid blue";
+        input.style.border = "3px solid red";
     }
 
     function clearError(input) {
         const errorElement = input.nextElementSibling;
         errorElement.innerText = "";
-        input.style.border = "3px solid grey";
+        input.style.border = "3px solid green";
     }
 
     form.addEventListener("input", function (event) {
@@ -36,8 +36,8 @@ document.addEventListener("DOMContentLoaded", function () {
         let isValid = false;
 
         if (input.id === "fullName") isValid = validateFullName(value);
-        if (input.id === "emailaddress") isValid = validateEmailAddress(value);
-        if (input.id === "phonenumber") isValid = validatePhoneNumber(value);
+        if (input.id === "email") isValid = validateEmailAddress(value);
+        if (input.id === "phone") isValid = validatePhoneNumber(value);
         if (input.id === "passcode") isValid = validatePasscode(value);
 
         if (isValid) clearError(input);
@@ -48,34 +48,38 @@ document.addEventListener("DOMContentLoaded", function () {
         event.preventDefault();
 
         const fullName = document.getElementById("fullName");
-        const emailaddress = document.getElementById("emailaddress");
-        const phonenumber = document.getElementById("phonenumber");
+        const email = document.getElementById("email");
+        const phone = document.getElementById("phone");
         const passcode = document.getElementById("passcode");
-        const validationMessage = document.getElementById("validationMessage");
+        const validationMessage = document.getElementById("validatemessage");
 
         let isValid = true;
 
         if (!validateFullName(fullName.value)) {
-            showError(fullName, "Only letters and spaces are allowed");
+            showError(fullName, "Only letters and spaces allowed");
             isValid = false;
         }
-        if (!validateEmailaddress(emailaddress.value)) {
-            showError(emailaddress, "Enter a valid email");
+
+        if (!validateEmailAddress(email.value)) {
+            showError(email, "Enter a valid email");
             isValid = false;
         }
-        if (!validatePhone(phone.value)) {
-            showError(phone, "Only numbers, 10-15 characters");
+
+        if (!validatePhoneNumber(phone.value)) {
+            showError(phone, "Must be 10–15 digits");
             isValid = false;
         }
+
         if (!validatePasscode(passcode.value)) {
-            showError(passcode, "Must have 8+ chars, 1 uppercase, 1 lowercase, 1 number");
+            showError(passcode, "Min 8 chars, 1 uppercase, 1 lowercase, 1 number");
             isValid = false;
         }
 
         if (isValid) {
-            validationMessage.innerText = "The submission was successful";
+            validationMessage.innerText = "The submission was successful!";
             validationMessage.style.color = "green";
             form.reset();
+            document.querySelectorAll("input").forEach(input => clearError(input));
         } else {
             validationMessage.innerText = "";
         }
